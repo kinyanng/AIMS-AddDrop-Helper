@@ -23,7 +23,7 @@ namespace AIMS
         private String ParameterString;
 
         private HttpWebRequest Request;
-        private HttpWebResponse Response;
+        private String ResponseHeaders;
         private HtmlAgilityPack.HtmlDocument HtmlDoc;
 
         private static CookieContainer Cookie = new CookieContainer();
@@ -83,7 +83,10 @@ namespace AIMS
                 Request.ContentType = "application/x-www-form-urlencoded";
                 Request.ContentLength = bs.Length;
 
-                Request.GetRequestStream().Write(bs, 0, bs.Length);
+                using (Stream stream = Request.GetRequestStream())
+                {
+                    stream.Write(bs, 0, bs.Length);
+                }
             }
             Debug.WriteLine("** Request Header **" + System.Environment.NewLine + Request.Headers);
             Debug.WriteLine("Method: " + Method + ", Content: " + ParameterString);
@@ -91,37 +94,42 @@ namespace AIMS
             String htmlSource = "";
 
             // Send request to server
-            Response = (HttpWebResponse)Request.GetResponse();
-            Debug.WriteLine("** Response Header **" + System.Environment.NewLine + Response.Headers);
-
-            if (Response.StatusCode == HttpStatusCode.OK)
+            using (HttpWebResponse response = (HttpWebResponse)Request.GetResponse())
             {
-                Cookie = new CookieContainer();
-                foreach (Cookie cookie in Response.Cookies)
-                {
-                    Cookie.Add(new Uri(ORIGIN), cookie);
-                    Debug.WriteLine("Cookie: " + cookie);
-                }
+                ResponseHeaders = response.Headers.ToString();
+                Debug.WriteLine("** Response Header **" + System.Environment.NewLine + ResponseHeaders);
 
-                StreamReader responseReader = new StreamReader(Response.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
-                htmlSource = responseReader.ReadToEnd();
-
-                HtmlDoc = new HtmlAgilityPack.HtmlDocument();
-                HtmlDoc.LoadHtml(htmlSource);
-
-                // Check session
-                if (htmlSource.Contains("A break in attempt has been detected!"))
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    throw new WebException("Break in attempt");
+                    Cookie = new CookieContainer();
+                    foreach (Cookie cookie in response.Cookies)
+                    {
+                        Cookie.Add(new Uri(ORIGIN), cookie);
+                        Debug.WriteLine("Cookie: " + cookie);
+                    }
+
+                    using (StreamReader responseReader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding("UTF-8")))
+                    {
+                        htmlSource = responseReader.ReadToEnd();
+                    }
+
+                    HtmlDoc = new HtmlAgilityPack.HtmlDocument();
+                    HtmlDoc.LoadHtml(htmlSource);
+
+                    // Check session
+                    if (htmlSource.Contains("A break in attempt has been detected!"))
+                    {
+                        throw new WebException("Break in attempt");
+                    }
+                    else if (htmlSource.Contains("Your AIMS session has been timeout (15 minutes inactivity)."))
+                    {
+                        throw new WebException("Session timeout");
+                    }
                 }
-                else if (htmlSource.Contains("Your AIMS session has been timeout (15 minutes inactivity)."))
+                else
                 {
-                    throw new WebException("Session timeout");
+                    throw new WebException("Status " + response.StatusCode);
                 }
-            }
-            else
-            {
-                throw new WebException("Status " + Response.StatusCode);
             }
 
             return htmlSource;
@@ -159,7 +167,7 @@ namespace AIMS
             {
                 String toReturn = "** Request Header **" + System.Environment.NewLine + Request.Headers;
                 toReturn += System.Environment.NewLine + "Method: " + Method + ", Content: " + ParameterString + System.Environment.NewLine;
-                toReturn += System.Environment.NewLine + "** Response Header **" + System.Environment.NewLine + Response.Headers;
+                toReturn += System.Environment.NewLine + "** Response Header **" + System.Environment.NewLine + ResponseHeaders;
                 //toReturn += System.Environment.NewLine + "** Response Content **" + System.Environment.NewLine + HtmlDoc.DocumentNode.OuterHtml;
 
                 return base.ToString() + System.Environment.NewLine + toReturn;

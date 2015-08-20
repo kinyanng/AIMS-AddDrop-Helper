@@ -9,6 +9,9 @@ AIMS Add/Drop Helper is for academic purpose only. **Any method to attempt gaini
 
 Note: [Microsoft .NET Framework 4](http://www.microsoft.com/en-us/download/details.aspx?id=42643) or higher version is required to run the application.
 
+v0.5
+- Improved stability.
+
 v0.4
 - NEW: Update course registration term automatically.
 - Fixed bugs with fetching course details (AIMS has changed the DOM structure).

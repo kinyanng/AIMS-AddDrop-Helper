@@ -492,7 +492,7 @@
             this.Name = "Main";
             this.Padding = new System.Windows.Forms.Padding(20);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "AIMS Add/Drop Helper - v0.4 R2";
+            this.Text = "AIMS Add/Drop Helper - v0.5 R2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Shown += new System.EventHandler(this.Main_Shown);
             this.group_settings.ResumeLayout(false);
