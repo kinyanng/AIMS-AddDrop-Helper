@@ -285,13 +285,23 @@ namespace AIMS
             AddDropTerm += DateTime.Now.Year;
             switch (DateTime.Now.Month)
             {
+                case 12:
                 case 1:
                 case 2:
                 case 3:
                 case 4:
-                case 12:
+                    // Special case
+                    if (DateTime.Now.Month == 12)
+                    {
+                        AddDropTerm = DateTime.Now.Year + 1 + "";
+                        log += "Semester B " + DateTime.Now.Year + '/' + (DateTime.Now.Year + 1) % 2000;
+                    }
+                    else
+                    {
+                        log += "Semester B " + (DateTime.Now.Year - 1) + '/' + DateTime.Now.Year % 2000;
+                    }
+
                     AddDropTerm += "02";
-                    log += "Semester B " + (DateTime.Now.Year - 1) + '/' + DateTime.Now.Year % 2000;
                     break;
                 case 5:
                 case 6:
