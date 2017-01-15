@@ -80,7 +80,7 @@
             this.label_copyright.Name = "label_copyright";
             this.label_copyright.Size = new System.Drawing.Size(331, 26);
             this.label_copyright.TabIndex = 0;
-            this.label_copyright.Text = "Developed by CS.EN 2015\r\nNot for sale. For academic purpose only, please use at y" +
+            this.label_copyright.Text = "Developed by CS.EN 2017\r\nNot for sale. For academic purpose only, please use at y" +
     "our own risk.";
             this.label_copyright.Click += new System.EventHandler(this.label_copyright_Click);
             // 
@@ -492,7 +492,7 @@
             this.Name = "Main";
             this.Padding = new System.Windows.Forms.Padding(20);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "AIMS Add/Drop Helper - v0.6 R2";
+            this.Text = "AIMS Add/Drop Helper - v0.7 R2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Shown += new System.EventHandler(this.Main_Shown);
             this.group_settings.ResumeLayout(false);

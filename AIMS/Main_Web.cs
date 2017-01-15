@@ -113,7 +113,7 @@ namespace AIMS
                 label_registeredCourse.Text = label_registeredCourse.Text.Replace(":", " for " + title.Replace("Active Registration (", "").Replace(")", "") + ":");
 
                 List<Course> toReturn = new List<Course>();
-                foreach (HtmlAgilityPack.HtmlNode row in activeCoursePage.GetHtmlNodeCollection("//table[2]//tr"))
+                foreach (HtmlAgilityPack.HtmlNode row in activeCoursePage.GetHtmlNodeCollection("//table[3]//tr"))
                 {
                     HtmlAgilityPack.HtmlNodeCollection courseDetails = row.SelectNodes("td");
 

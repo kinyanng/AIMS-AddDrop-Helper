@@ -440,7 +440,7 @@ namespace AIMS
                     }
                     else
                     {
-                        InsertLog("Cannot add duplicated request for section " + course.Section + ".", Color.Red);
+                        InsertLog("Cannot add duplicated request for section " + course.Section + " in a same priority.", Color.Red);
                     }
                 }
                 SetRequestListView();
